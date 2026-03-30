@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Skill Learning Academy Marketplace</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #808080, #000000);
+        }
+
+        header {
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        nav {
+            background-color: rgba(0,0,0,0.6);
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: yellow;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+        }
+
+        button {
+            background-color: #4facfe;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            background-color: #00c6ff;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .course-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+
+        section {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    Skill Learning Academy Marketplace
+</header>
+
+<nav>
+    <a onclick="showPage('home')">Home</a>
+    <a onclick="showPage('courses')">Courses</a>
+    <a onclick="showPage('login')">Login</a>
+    <a onclick="showPage('register')">Register</a>
+    <a onclick="showPage('upload')">Upload Course</a>
+    <a onclick="showPage('payment')">Payment</a>
+</nav>
+
+<div class="container">
+
+    <!-- Home -->
+    <section id="home" class="active">
+        <h2>Home Page</h2>
+
+        <div class="course-card">
+            <h4>Web Development</h4>
+            <p>Duration: 30 Days</p>
+            <button onclick="openCourse('Web Development', '30 Days', 50)">View Course</button>
+        </div>
+
+        <div class="course-card">
+            <h4>Python Programming</h4>
+            <p>Duration: 45 Days</p>
+            <button onclick="openCourse('Python Programming', '45 Days', 60)">View Course</button>
+        </div>
+    </section>
+
+    <!-- Courses -->
+    <section id="courses">
+        <h2>Course Listing</h2>
+
+        <div class="course-card">
+            <h3>Full Stack Development</h3>
+            <button onclick="showPrice('Full Stack Development', 80)">Details</button>
+        </div>
+
+        <div class="course-card">
+            <h3>Data Science</h3>
+            <button onclick="showPrice('Data Science', 90)">Details</button>
+        </div>
+
+        <p id="priceDisplay"></p>
+    </section>
+
+    <!-- Course Details -->
+    <section id="details">
+        <h2>Course Details</h2>
+        <p id="courseName"></p>
+        <p id="courseDuration"></p>
+        <p id="coursePrice"></p>
+        <button onclick="enrollCourse()">Enroll</button>
+    </section>
+
+    <!-- Login -->
+    <section id="login">
+        <h2>Login</h2>
+        <input type="text" placeholder="Name">
+        <input type="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </section>
+
+    <!-- Register -->
+    <section id="register">
+        <h2>Register</h2>
+        <input type="email" placeholder="Email">
+        <input type="password" placeholder="Password">
+        <select>
+            <option>Student</option>
+            <option>Instructor</option>
+        </select>
+        <button onclick="register()">Register</button>
+    </section>
+
+    <!-- Upload Course -->
+    <section id="upload">
+        <h2>Upload Course</h2>
+        <input type="text" id="newTitle" placeholder="Course Title">
+        <input type="text" id="newDuration" placeholder="Duration">
+        <input type="number" id="newPrice" placeholder="Price">
+        <button onclick="uploadCourse()">Upload</button>
+        <p id="uploadMsg"></p>
+    </section>
+
+    <!-- Payment -->
+    <section id="payment">
+        <h2>Payment</h2>
+        <p id="paymentCourse"></p>
+        <select>
+            <option>Credit Card</option>
+            <option>Debit Card</option>
+            <option>UPI</option>
+        </select>
+        <button onclick="completePayment()">Complete Payment</button>
+        <p id="paymentMsg"></p>
+    </section>
+
+</div>
+
+<script>
+    let selectedCourse = "";
+    let selectedPrice = "";
+    let selectedDuration = "";
+
+    function showPage(page) {
+        let sections = document.querySelectorAll("section");
+        sections.forEach(sec => sec.classList.remove("active"));
+        document.getElementById(page).classList.add("active");
+    }
+
+    function openCourse(name, duration, price) {
+        selectedCourse = name;
+        selectedDuration = duration;
+        selectedPrice = price;
+
+        document.getElementById("courseName").innerText = "Course: " + name;
+        document.getElementById("courseDuration").innerText = "Duration: " + duration;
+        document.getElementById("coursePrice").innerText = "Price: $" + price;
+
+        showPage("details");
+    }
+
+    function showPrice(course, price) {
+        document.getElementById("priceDisplay").innerText =
+            course + " Price: $" + price;
+    }
+
+    function enrollCourse() {
+        document.getElementById("paymentCourse").innerText =
+            "Course: " + selectedCourse + " | Price: $" + selectedPrice;
+        showPage("login");
+    }
+
+    function login() {
+        alert("Login Successful");
+        showPage("payment");
+    }
+
+    function register() {
+        alert("Registration Successful");
+        showPage("login");
+    }
+
+    function uploadCourse() {
+        let title = document.getElementById("newTitle").value;
+        let duration = document.getElementById("newDuration").value;
+        let price = document.getElementById("newPrice").value;
+
+        document.getElementById("uploadMsg").innerText =
+            "Course Uploaded: " + title +
+            " | Duration: " + duration +
+            " | Price: $" + price;
+    }
+
+    function completePayment() {
+        document.getElementById("paymentMsg").innerText =
+            "Payment Successful for " + selectedCourse;
+    }
+</script>
+
+</body>
+</html>
